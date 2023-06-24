@@ -9,7 +9,7 @@ const car = new Car(
     100,
     30,
     50,
-    "KEYS"
+    "AI"
 );
 const traffic = [
     new Car(
