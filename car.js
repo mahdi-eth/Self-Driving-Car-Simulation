@@ -1,11 +1,11 @@
 class Car {
-    constructor(x, y, w, h, controlType, maxSpeed = 3) {
+    constructor(x, y, w, h, controlType, maxSpeed = 3, color = "blue") {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
 
-        this.speed = 0;
+        this.speed = 1.5;
         this.acceleration = 0.2;
         this.maxSpeed = maxSpeed;
         this.friction = 0.05;
@@ -19,6 +19,24 @@ class Car {
             this.brain = new NeuralNetwork([this.sensor.rayCount, 6, 4]);
         }
         this.controls = new Controls(controlType);
+
+        this.img = new Image();
+        this.img.src = "car.png";
+
+        this.mask = document.createElement("canvas");
+        this.mask.width = w;
+        this.mask.height = h;
+
+        const maskCtx = this.mask.getContext("2d");
+
+        this.img.onload = () => {
+            maskCtx.fillStyle = color;
+            maskCtx.rect(0, 0, this.w, this.h);
+            maskCtx.fill();
+
+            maskCtx.globalCompositeOperation = "destination-atop";
+            maskCtx.drawImage(this.img, 0, 0, this.w, this.h);
+        };
     }
 
     update(roadBorders, traffic) {
@@ -33,7 +51,6 @@ class Car {
                 s == null ? 0 : 1 - s.offset
             );
             const outputs = NeuralNetwork.feedForward(offsets, this.brain);
-            console.log(outputs);
 
             if (this.useBrain) {
                 this.controls.forward = outputs[0];
@@ -127,22 +144,18 @@ class Car {
         this.y -= Math.cos(this.angle) * this.speed;
     }
 
-    draw(ctx, color) {
-        if (this.damaged) {
-            ctx.fillStyle = "gray";
-        } else {
-            ctx.fillStyle = color;
+    draw(ctx, drawSensor = false) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(-this.angle);
+        if (!this.damaged) {
+            ctx.drawImage(this.mask, -this.w / 2, -this.h / 2, this.w, this.h);
+            ctx.globalCompositeOperation = "multiply";
         }
+        ctx.drawImage(this.img, -this.w / 2, -this.h / 2, this.w, this.h);
+        ctx.restore();
 
-        ctx.beginPath();
-        ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-        for (let i = 1; i < this.polygon.length; i++) {
-            ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
-        }
-
-        ctx.fill();
-
-        if (this.sensor) {
+        if (this.sensor && drawSensor) {
             this.sensor.draw(ctx);
         }
     }

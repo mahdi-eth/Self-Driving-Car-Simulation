@@ -3,8 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script defer src="network.js"></script>
         <script defer src="utils.js"></script>
+        <script defer src="visualizer.js"></script>
+        <script defer src="network.js"></script>
         <script defer src="sensor.js"></script>
         <script defer src="road.js"></script>
         <script defer src="controls.js"></script>
@@ -14,6 +15,11 @@
         <title>SelfDriving car</title>
     </head>
     <body>
-        <canvas id="myCanvas"></canvas>
+        <canvas id="carCanvas"></canvas>
+        <div id="verticalButtons">
+            <button onclick="save()">save</button>
+            <button onclick="discard()">discard</button>
+        </div>
+        <canvas id="networkCanvas"></canvas>
     </body>
 </html>

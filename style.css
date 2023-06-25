@@ -1,10 +1,39 @@
+html {
+    font-size: 62.5%;
+}
+
 body {
     margin: 0;
     background: darkgray;
     overflow: hidden;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
-#myCanvas {
+#verticalButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+button {
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem 0.5rem 0.7rem;
+    cursor: pointer;
+}
+
+button:hover {
+    transition: all ease 0.25s;
+    background: rgb(0, 195, 255);
+}
+
+#carCanvas {
     background: lightgray;
+}
+
+#networkCanvas {
+    background: black;
 }
